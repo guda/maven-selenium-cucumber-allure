@@ -1,4 +1,4 @@
-Feature: search Wikipedia
+Feature: search Google
 
   Background:
     Given Open page "https://www.google.ba"

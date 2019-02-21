@@ -5,6 +5,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import io.qameta.allure.Attachment;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -19,27 +20,46 @@ public class Hooks {
     private static ThreadLocal<DriverFactory> driverFactoryThread;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         driverFactoryThread = ThreadLocal.withInitial(() -> {
             DriverFactory driverFactory = new DriverFactory();
             webDriverThreadPool.add(driverFactory);
 
             return driverFactory;
         });
+
+        driverFactoryThread.get().getDriver().manage().window().setSize(new Dimension(1280, 1024));
     }
 
     @After
     public void cleanUp(Scenario scenario) {
-        if (scenario.isFailed())
+        if (scenario.isFailed()) {
             attachScreenShot();
+            attachConsoleLog();
+        }
+
         for (DriverFactory driverFactory : webDriverThreadPool) {
             driverFactory.quitDriver();
         }
     }
 
-    @Attachment()
+    @Attachment("Failure screenshot")
     private static byte[] attachScreenShot() {
         return ((TakesScreenshot) Objects.requireNonNull(getDriver())).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment("Browser console log")
+    private byte[] attachConsoleLog() {
+        ArrayList consoleLogs = BrowserConsoleLog.consoleAllLogs(Objects.requireNonNull(getDriver()));
+        String consoleLog = "CONSOLE LOG: ";
+
+        if (consoleLogs.isEmpty())
+            consoleLog += " NO CONSOLE LOGS DETECTED!";
+        else
+            for (Object log : consoleLogs)
+                consoleLog += log;
+
+        return consoleLog.getBytes();
     }
 
     public static RemoteWebDriver getDriver() {

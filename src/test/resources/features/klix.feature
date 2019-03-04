@@ -6,3 +6,6 @@ Feature: Navigate Klix
   Scenario: Klix navigate
     Given User is on page with title 'Klix.ba | Saznaj više'
     Then Vijesti link is shown
+
+  Scenario: Custom Scenario
+    Given Custom scenario

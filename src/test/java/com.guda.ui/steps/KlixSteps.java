@@ -24,4 +24,9 @@ public class KlixSteps {
     public void assertVijestiLinkVisibleOnPage() {
         assertTrue("", klixPage.vijestiLinkVisibleOnPage());
     }
+    @Given("^Custom scenario$")
+    public void customScenario() {
+        assertTrue("Failing test due to testing purposes", false);
+    }
+
 }

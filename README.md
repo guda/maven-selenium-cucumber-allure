@@ -15,6 +15,7 @@ Webdriver creation is thread safe and parallel execution is working by simply pr
 - -DdesiredBrowserVersion
 - -DdesiredPlatform
 - -Dthreads {$number_of_tests_in_parallel}
+- -Dsurefire.runFailingTestsCount=2 (retries failed test for 2 times before marking it a failure)
 
 ### Allure
 - Running Allure reports (if installed, or plugin added to jenkins) with command `allure:serve` at the end of Maven execution command

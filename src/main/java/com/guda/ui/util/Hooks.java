@@ -28,7 +28,7 @@ public class Hooks {
             return driverFactory;
         });
 
-        driverFactoryThread.get().getDriver().manage().window().setSize(new Dimension(1280, 1024));
+        driverFactoryThread.get().getDriver().manage().window().setSize(new Dimension(1920, 1024));
     }
 
     @After
